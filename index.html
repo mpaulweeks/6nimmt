@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>6nimmt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=432">
+    <script src="jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="deck.js"></script>
+    <script src="game.js"></script>
+
+</head>
+
+<body>
+<div class="container">
+    <h1>
+        6nimmt
+    </h1>
+
+    <p> git gud </p>
+
+    <a href='?'><button class='btn btn-small'>Local Versus</button></a>
+    <a href='?ai=1'><button class='btn btn-small'>Versus AI</button></a>
+
+    <h3>
+        <span id="message"></span>
+    </h3>
+
+    <div id="board">
+    </div>
+
+    <button class='btn' id='reset'>
+        RESET
+    </button>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        game();
+    });
+</script>
+</body>
+</html>
