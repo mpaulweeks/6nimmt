@@ -43,17 +43,18 @@ function Row(id){
     };
     api.render = function(is_pickup){
         var html = "";
+        var row_class = "";
         var penalty_text = "";
-        var penalty_class = "";
         if (is_pickup){
+            row_class = " clickable-row";
             penalty_text = api.penalty();
-            penalty_class = " clickable-row";
         }
-        html += '<div id="row-' + self.id + '" class="penalty-option' + penalty_class + '">' + penalty_text + '</div>';
+        html += '<div id="row-' + self.id + '" class="row' + row_class + '">';
+        html += '<div class="penalty-option">' + penalty_text + '</div>';
         self.cards.forEach(function (card){
             html += card.render();
         });
-        html += '<div class="float-clear"></div>';
+        html += '</div><div class="float-clear"></div>';
         return html;
     };
 
@@ -120,9 +121,6 @@ function Board(){
             var new_row = Row(i);
             new_row.push(self.deck.draw());
             self.rows.push(new_row);
-            $('#board').append(
-                '<div id="row-' + i + '" class="row"></div>'
-            );
         }
         self.players = [];
         for (var i = 0; i < 1; i++){
@@ -154,6 +152,10 @@ function Board(){
     };
 
     api.pickup_row = function(row_index){
+        if (!self.pickup_card){
+            throw "called at bad time";
+        }
+        console.log('pickup row ok: ' + self.pickup_card.number);
         var row = self.rows[row_index];
         row.empty(self.pickup_card);
         self.pickup_card = null;
@@ -161,10 +163,12 @@ function Board(){
     }
 
     api.render = function(){
+        var row_html = "";
         for (var i = 0; i < NUM_ROWS; i++){
             var row = self.rows[i];
-            $('#row-' + i).html(row.render(self.pickup_card));
+            row_html += row.render(self.pickup_card);
         }
+        $('#board').html(row_html);
         $('#hand').html(self.player.render(self.pickup_card));
         $('.clickable-card').on('click', function(){
             var number = $(this).attr('id').split('card-')[1];

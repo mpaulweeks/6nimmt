@@ -19,7 +19,8 @@ body {
     width: 50px;
     height: 80px;
     margin: 0;
-    border: solid black 1px;
+    font-size: 25px;
+    line-height: 85px;
 }
 
 #hand {
@@ -60,7 +61,13 @@ body {
 .clickable-card {
     cursor: pointer;
 }
+.clickable-card:hover {
+    background-color: white;
+}
 
 .clickable-row {
     cursor: pointer;
+}
+.clickable-row:hover {
+    background-color: white;
 }
