@@ -15,6 +15,7 @@ function Deck(){
         }
         self.number = number;
         self.penalty = penalty;
+        self.owner = null;
         return self;
     }
 
