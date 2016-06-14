@@ -17,11 +17,11 @@ function Card(number){
     self.penalty = penalty;
     self.owner = null;
 
-    self.render = function(){
+    self.render = function(is_pickup){
         var id = "card-" + self.number;
         var classes = "card penalty-" + self.penalty;
-        if (self.owner){
-            classes += " clickable";
+        if (self.owner && !is_pickup){
+            classes += " clickable-card";
         }
         return '<div id="' + id + '" class="' + classes + '">' + self.number + '</div>';
     }

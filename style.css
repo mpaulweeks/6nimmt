@@ -10,8 +10,16 @@ body {
 }
 
 .row {
-    width: 520px;
+    width: 620px;
     margin: 0 auto;
+}
+
+.penalty-option {
+    float: left;
+    width: 50px;
+    height: 80px;
+    margin: 0;
+    border: solid black 1px;
 }
 
 #hand {
@@ -49,6 +57,10 @@ body {
     background-color: black;
 }
 
-.clickable {
+.clickable-card {
+    cursor: pointer;
+}
+
+.clickable-row {
     cursor: pointer;
 }

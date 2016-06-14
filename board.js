@@ -4,10 +4,11 @@
 NUM_ROWS = 4;
 ROW_MAX = 5;
 
-function Row(){
+function Row(id){
 
     var api = {};
     var self = {};
+    self.id = id;
     self.cards = [];
 
     api.push = function(card){
@@ -40,8 +41,15 @@ function Row(){
         self.cards = [];
         api.push(card);
     };
-    api.render = function(){
+    api.render = function(is_pickup){
         var html = "";
+        var penalty_text = "";
+        var penalty_class = "";
+        if (is_pickup){
+            penalty_text = api.penalty();
+            penalty_class = " clickable-row";
+        }
+        html += '<div id="row-' + self.id + '" class="penalty-option' + penalty_class + '">' + penalty_text + '</div>';
         self.cards.forEach(function (card){
             html += card.render();
         });
@@ -69,11 +77,12 @@ function Player(){
     api.penalize = function(penalty_points){
         self.penalty_points += penalty_points;
     };
-    api.render = function(){
+    api.render = function(is_pickup){
         var html = "";
         self.hand.forEach(function (card){
-            html += card.render();
-        })
+            html += card.render(is_pickup);
+        });
+        html += '<div class="float-clear"></div>';
         return html;
     };
     api.play_card = function(number){
@@ -102,11 +111,13 @@ function Board(){
     self.players = null;
     self.player = null;
 
+    self.pickup_card = null;
+
     api.setup = function(){
         self.deck = Deck();
         self.rows = [];
         for (var i = 0; i < NUM_ROWS; i++){
-            var new_row = Row();
+            var new_row = Row(i);
             new_row.push(self.deck.draw());
             self.rows.push(new_row);
             $('#board').append(
@@ -137,23 +148,32 @@ function Board(){
         if (best_row){
             best_row.push(card);
         } else {
-            // todo logic for choosing row
-            self.rows[0].empty(card);
+            self.pickup_card = card;
         }
         api.render();
     };
 
+    api.pickup_row = function(row_index){
+        var row = self.rows[row_index];
+        row.empty(self.pickup_card);
+        self.pickup_card = null;
+        api.render();
+    }
+
     api.render = function(){
         for (var i = 0; i < NUM_ROWS; i++){
             var row = self.rows[i];
-            $('#row-' + i).html(row.render());
+            $('#row-' + i).html(row.render(self.pickup_card));
         }
-        $('#hand').html(self.player.render());
-        $('#hand').append('<div class="float-clear"></div>');
-        $('.clickable').on('click', function(){
+        $('#hand').html(self.player.render(self.pickup_card));
+        $('.clickable-card').on('click', function(){
             var number = $(this).attr('id').split('card-')[1];
             var card = self.player.play_card(number);
             api.play(card);
+        });
+        $('.clickable-row').on('click', function(){
+            var number = $(this).attr('id').split('row-')[1];
+            api.pickup_row(number);
         });
     }
 
