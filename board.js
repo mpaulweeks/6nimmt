@@ -41,12 +41,13 @@ function Row(){
         api.push(card);
     };
     api.render = function(){
-        var html = "R ";
+        var html = "";
         self.cards.forEach(function (card){
             html += card.render();
-        })
+        });
+        html += '<div class="float-clear"></div>';
         return html;
-    }
+    };
 
     return api;
 }
@@ -68,6 +69,25 @@ function Player(){
     api.penalize = function(penalty_points){
         self.penalty_points += penalty_points;
     };
+    api.render = function(){
+        var html = "";
+        self.hand.forEach(function (card){
+            html += card.render();
+        })
+        return html;
+    };
+    api.play_card = function(number){
+        var index = null;
+        for (var i = 0; i < self.hand.length; i++){
+            if (self.hand[i].number == number){
+                index = i;
+            }
+        }
+        if (index == null){
+            throw "failed to play card";
+        }
+        return self.hand.splice(index, 1)[0];
+    }
 
     return api;
 }
@@ -80,6 +100,7 @@ function Board(){
     self.deck = null;
     self.rows = null;
     self.players = null;
+    self.player = null;
 
     api.setup = function(){
         self.deck = Deck();
@@ -89,7 +110,7 @@ function Board(){
             new_row.push(self.deck.draw());
             self.rows.push(new_row);
             $('#board').append(
-                '<div id="row-' + i + '">R</div>'
+                '<div id="row-' + i + '" class="row"></div>'
             );
         }
         self.players = [];
@@ -98,6 +119,7 @@ function Board(){
             new_player.deal(self.deck.draw(10));
             self.players.push(new_player);
         }
+        self.player = self.players[0];
         api.render();
     };
 
@@ -108,7 +130,7 @@ function Board(){
             var current_row = self.rows[i];
             var difference = current_row.difference(card);
             if (difference && difference < best_row_difference){
-                best_row = row;
+                best_row = current_row;
                 best_row_difference = difference;
             }
         }
@@ -118,6 +140,7 @@ function Board(){
             // todo logic for choosing row
             self.rows[0].empty(card);
         }
+        api.render();
     };
 
     api.render = function(){
@@ -125,6 +148,13 @@ function Board(){
             var row = self.rows[i];
             $('#row-' + i).html(row.render());
         }
+        $('#hand').html(self.player.render());
+        $('#hand').append('<div class="float-clear"></div>');
+        $('.clickable').on('click', function(){
+            var number = $(this).attr('id').split('card-')[1];
+            var card = self.player.play_card(number);
+            api.play(card);
+        });
     }
 
     return api;

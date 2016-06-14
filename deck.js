@@ -18,7 +18,12 @@ function Card(number){
     self.owner = null;
 
     self.render = function(){
-        return '<div class="card">' + self.number + '</div>';
+        var id = "card-" + self.number;
+        var classes = "card penalty-" + self.penalty;
+        if (self.owner){
+            classes += " clickable";
+        }
+        return '<div id="' + id + '" class="' + classes + '">' + self.number + '</div>';
     }
 
     return self;

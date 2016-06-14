@@ -4,3 +4,51 @@ body {
     font-family: "Cambria", Helvetica, Arial, sans-serif;
     text-align: center;
 }
+
+.float-clear {
+    clear: both;
+}
+
+.row {
+    width: 520px;
+    margin: 0 auto;
+}
+
+#hand {
+    width: 520px;
+    margin: 0 auto;
+}
+
+.card {
+    float: left;
+    width: 100px;
+    height: 80px;
+    border: solid black 2px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    font-size: 40px;
+    line-height: 75px;
+    margin: 2px;
+}
+
+.penalty-1 {
+    color: black;
+}
+.penalty-2 {
+    color: blue;
+}
+.penalty-3 {
+    color: green;
+}
+.penalty-5 {
+    color: red;
+}
+.penalty-7 {
+    color: yellow;
+    background-color: black;
+}
+
+.clickable {
+    cursor: pointer;
+}
