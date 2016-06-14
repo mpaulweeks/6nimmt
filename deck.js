@@ -1,23 +1,30 @@
 
-function Deck(){
-    
-    function make_card(number){
-        var self = {};
-        var penalty = 1;
-        if (number == 55){
-            penalty = 7;
-        } else if (number % 11 == 0){
-            penalty = 5;
-        } else if (number % 10 == 0){
-            penalty = 3;
-        } else if (number % 5 == 0){
-            penalty = 2;
-        }
-        self.number = number;
-        self.penalty = penalty;
-        self.owner = null;
-        return self;
+function Card(number){
+
+    var self = {};
+
+    var penalty = 1;
+    if (number == 55){
+        penalty = 7;
+    } else if (number % 11 == 0){
+        penalty = 5;
+    } else if (number % 10 == 0){
+        penalty = 3;
+    } else if (number % 5 == 0){
+        penalty = 2;
     }
+    self.number = number;
+    self.penalty = penalty;
+    self.owner = null;
+
+    self.render = function(){
+        return '<div class="card">' + self.number + '</div>';
+    }
+
+    return self;
+}
+
+function Deck(){
 
     function shuffle(a) {
         var j, x, i;
@@ -32,7 +39,7 @@ function Deck(){
     function make_deck(){
         var deck = [];
         for (var i = 1; i <= 104; i++){
-            deck.push(make_card(i));
+            deck.push(Card(i));
         }
         shuffle(deck);
         return deck;

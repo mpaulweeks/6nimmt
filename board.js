@@ -20,25 +20,32 @@ function Row(){
     };
     api.peek = function(){
         return self.cards[self.cards.length - 1].number;
-    }
+    };
     api.penalty = function(){
         var penalty = 0;
         self.cards.forEach(function (card){
             penalty += card.penalty;
         });
         return penalty;
-    }
+    };
     api.difference = function(card){
         var tail = api.peek();
         if (tail < card.number){
             return card.number - tail;
         }
         return null;
-    }
+    };
     api.empty = function(card){
         card.owner.penalize(api.penalty());
         self.cards = [];
         api.push(card);
+    };
+    api.render = function(){
+        var html = "R ";
+        self.cards.forEach(function (card){
+            html += card.render();
+        })
+        return html;
     }
 
     return api;
@@ -60,7 +67,7 @@ function Player(){
     };
     api.penalize = function(penalty_points){
         self.penalty_points += penalty_points;
-    }
+    };
 
     return api;
 }
@@ -68,18 +75,22 @@ function Player(){
 function Board(){
 
     var self = {};
+    var api = {};
     
     self.deck = null;
     self.rows = null;
     self.players = null;
 
-    function setup(){
+    api.setup = function(){
         self.deck = Deck();
         self.rows = [];
         for (var i = 0; i < NUM_ROWS; i++){
             var new_row = Row();
             new_row.push(self.deck.draw());
             self.rows.push(new_row);
+            $('#board').append(
+                '<div id="row-' + i + '">R</div>'
+            );
         }
         self.players = [];
         for (var i = 0; i < 1; i++){
@@ -87,9 +98,10 @@ function Board(){
             new_player.deal(self.deck.draw(10));
             self.players.push(new_player);
         }
-    }
+        api.render();
+    };
 
-    function play(card){
+    api.play = function(card){
         var best_row = null;
         var best_row_difference = 104;
         for (var i = 0; i < NUM_ROWS; i++){
@@ -106,6 +118,14 @@ function Board(){
             // todo logic for choosing row
             self.rows[0].empty(card);
         }
+    };
+
+    api.render = function(){
+        for (var i = 0; i < NUM_ROWS; i++){
+            var row = self.rows[i];
+            $('#row-' + i).html(row.render());
+        }
     }
 
+    return api;
 }
